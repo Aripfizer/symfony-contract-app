@@ -10,10 +10,10 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\State\ContractStateProcessor;
 use Symfony\Component\Serializer\Annotation\Groups;
-
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 
 #[ORM\Entity(repositoryClass: ContractRepository::class)]
-
 #[ApiResource(
     operations: [
         new Post(processor: ContractStateProcessor::class),
@@ -21,6 +21,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     normalizationContext: ['groups' => ['read']],
 )]
+#[ApiFilter(SearchFilter::class, properties: ['client_id.firstname' => 'partial', 'client_id.lastname' => 'partial', 'company_id.title' => 'partial', 'company_id.category.name' => 'partial'])]
+
 class Contract
 {
     #[ORM\Id]
