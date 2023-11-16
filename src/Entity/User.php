@@ -18,7 +18,8 @@ use ApiPlatform\Metadata\Put;
 
 #[ApiResource(
     operations: [
-        new Post(processor: UserStateProcessor::class)
+        new Post(processor: UserStateProcessor::class),
+        new GetCollection()
     ]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]

@@ -9,7 +9,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
-// #[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['category:read']],
+    denormalizationContext: ['groups' => ['category:write']]
+)]
 class Category
 {
     #[ORM\Id]
@@ -20,6 +23,7 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups('category:read')]
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Company::class)]
     private Collection $companies;
 

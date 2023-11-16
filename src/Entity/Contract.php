@@ -6,9 +6,21 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ContractRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use App\State\ContractStateProcessor;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: ContractRepository::class)]
-// #[ApiResource]
+
+#[ApiResource(
+    operations: [
+        new Post(processor: ContractStateProcessor::class),
+        new GetCollection()
+    ],
+    normalizationContext: ['groups' => ['read']],
+)]
 class Contract
 {
     #[ORM\Id]
@@ -16,37 +28,48 @@ class Contract
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['read'])]
     #[ORM\Column(length: 255)]
     private ?string $contract_number = null;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_of_issue = null;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $effective_date = null;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $due_date = null;
 
+    #[Groups(['read'])]
     #[ORM\Column]
     private ?float $net_prime = null;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column]
     private ?float $ttc_prime = null;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column]
     private ?float $tax = null;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column]
     private ?float $accessory = null;
 
+    #[Groups(['read', 'write'])]
     #[ORM\Column(nullable: true)]
     private ?float $automobile_guarantee_fund = null;
 
+    #[Groups(['read', 'write'])]
     #[ORM\OneToOne(inversedBy: 'contract', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client_id = null;
 
+    #[Groups(['read', 'write'])]
     #[ORM\ManyToOne(inversedBy: 'contracts')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company_id = null;
