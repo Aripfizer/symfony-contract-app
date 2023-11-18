@@ -7,23 +7,23 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
-#[ApiResource(
-    normalizationContext: ['groups' => ['category:read']],
-    denormalizationContext: ['groups' => ['category:write']]
-)]
+#[ApiResource]
 class Category
 {
+    #[Groups('company', 'contract')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('company', 'contract')]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups('category:read')]
+    // #[Groups('category:read')]
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Company::class)]
     private Collection $companies;
 

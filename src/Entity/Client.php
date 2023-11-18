@@ -5,29 +5,28 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 #[ApiResource]
 class Client
 {
+    #[Groups('contract')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('contract')]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
+    #[Groups('contract')]
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
-
-    #[ORM\OneToOne(mappedBy: 'client_id', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'client', cascade: ['persist', 'remove'])]
     private ?Contract $contract = null;
 
     public function getId(): ?int
@@ -59,30 +58,6 @@ class Client
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
-    {
-        $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
     public function getContract(): ?Contract
     {
         return $this->contract;
@@ -91,8 +66,8 @@ class Client
     public function setContract(Contract $contract): static
     {
         // set the owning side of the relation if necessary
-        if ($contract->getClientId() !== $this) {
-            $contract->setClientId($this);
+        if ($contract->getClient() !== $this) {
+            $contract->setClient($this);
         }
 
         $this->contract = $contract;

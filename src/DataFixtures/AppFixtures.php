@@ -111,14 +111,6 @@ class AppFixtures extends Fixture
             $client->setFirstname($faker->firstName);
             $client->setLastname($faker->lastName);
 
-            $createdAt = $faker->dateTimeBetween('-1 year', 'now');
-            $client->setCreatedAt(\DateTimeImmutable::createFromMutable($createdAt));
-
-            // Utilisez DateTimeImmutable pour setUpdatedAt
-            $updatedAt = $faker->dateTimeBetween($createdAt, 'now');
-            $client->setUpdatedAt(\DateTimeImmutable::createFromMutable($updatedAt));
-
-
             // $client->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'));
             // $client->setUpdatedAt($faker->dateTimeBetween($client->getCreatedAt(), 'now'));
 

@@ -7,24 +7,28 @@ use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
-#[ApiResource]
+// #[ApiResource(normalizationContext: ['groups' => ['company']])]
 class Company
 {
+    #[Groups('company', 'contract')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('company', 'contract')]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[Groups('company', 'contract')]
     #[ORM\ManyToOne(inversedBy: 'companies')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\OneToMany(mappedBy: 'company_id', targetEntity: Contract::class)]
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Contract::class)]
     private Collection $contracts;
 
     public function __construct()
@@ -83,8 +87,8 @@ class Company
     {
         if ($this->contracts->removeElement($contract)) {
             // set the owning side to null (unless already changed)
-            if ($contract->getCompanyId() === $this) {
-                $contract->setCompanyId(null);
+            if ($contract->getCompany() === $this) {
+                $contract->setCompany(null);
             }
         }
 

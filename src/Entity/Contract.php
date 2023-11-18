@@ -19,30 +19,32 @@ use ApiPlatform\Metadata\ApiFilter;
         new Post(processor: ContractStateProcessor::class),
         new GetCollection()
     ],
-    normalizationContext: ['groups' => ['read']],
+    normalizationContext: ['groups' => ['contract']],
+    
 )]
-#[ApiFilter(SearchFilter::class, properties: ['client_id.firstname' => 'partial', 'client_id.lastname' => 'partial', 'company_id.title' => 'partial', 'company_id.category.name' => 'partial'])]
+#[ApiFilter(SearchFilter::class, properties: ['client.firstname' => 'partial', 'client.lastname' => 'partial', 'company.title' => 'partial', 'company.category.name' => 'partial'])]
 
 class Contract
 {
+    #[Groups('contract')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['read'])]
+    #[Groups('contract')]
     #[ORM\Column(length: 255)]
     private ?string $contract_number = null;
 
-    #[Groups(['read', 'write'])]
+    #[Groups('contract')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_of_issue = null;
 
-    #[Groups(['read', 'write'])]
+    #[Groups('contract')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $effective_date = null;
 
-    #[Groups(['read', 'write'])]
+    #[Groups('contract')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $due_date = null;
 
@@ -50,31 +52,31 @@ class Contract
     #[ORM\Column]
     private ?float $net_prime = null;
 
-    #[Groups(['read', 'write'])]
+    #[Groups('contract')]
     #[ORM\Column]
     private ?float $ttc_prime = null;
 
-    #[Groups(['read', 'write'])]
+    #[Groups('contract')]
     #[ORM\Column]
     private ?float $tax = null;
 
-    #[Groups(['read', 'write'])]
+    #[Groups('contract')]
     #[ORM\Column]
     private ?float $accessory = null;
 
-    #[Groups(['read', 'write'])]
+    #[Groups('contract')]
     #[ORM\Column(nullable: true)]
     private ?float $automobile_guarantee_fund = null;
 
-    #[Groups(['read', 'write'])]
+    #[Groups('contract')]
     #[ORM\OneToOne(inversedBy: 'contract', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Client $client_id = null;
+    private ?Client $client = null;
 
-    #[Groups(['read', 'write'])]
+    #[Groups('contract')]
     #[ORM\ManyToOne(inversedBy: 'contracts')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Company $company_id = null;
+    private ?Company $company = null;
 
     public function getId(): ?int
     {
@@ -189,26 +191,26 @@ class Contract
         return $this;
     }
 
-    public function getClientId(): ?Client
+    public function getClient(): ?Client
     {
-        return $this->client_id;
+        return $this->client;
     }
 
-    public function setClientId(Client $client_id): static
+    public function setClient(Client $client): static
     {
-        $this->client_id = $client_id;
+        $this->client = $client;
 
         return $this;
     }
 
-    public function getCompanyId(): ?Company
+    public function getCompany(): ?Company
     {
-        return $this->company_id;
+        return $this->company;
     }
 
-    public function setCompanyId(?Company $company_id): static
+    public function setCompany(?Company $company): static
     {
-        $this->company_id = $company_id;
+        $this->company = $company;
 
         return $this;
     }

@@ -17,7 +17,7 @@ class ContractStateProcessor implements ProcessorInterface
     {
         $ttc_prime = $data->getNetPrime() + $data->getTax() + $data->getAccessory();
 
-        $company = $this->entityManager->getRepository(Company::class)->find($data->getCompanyId());
+        $company = $this->entityManager->getRepository(Company::class)->find($data->getCompany());
 
         if ($company->getCategory()->getName() == "Automobile") {
             $ttc_prime += $data->getAutomobileGuaranteeFund();
