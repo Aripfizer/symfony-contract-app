@@ -117,8 +117,8 @@ class AppFixtures extends Fixture
             $manager->persist($client);
 
 
-            $contract->setClientId($client);
-            $contract->setCompanyId($faker->randomElement($companies));
+            $contract->setClient($client);
+            $contract->setCompany($faker->randomElement($companies));
 
             $manager->persist($contract);
         }

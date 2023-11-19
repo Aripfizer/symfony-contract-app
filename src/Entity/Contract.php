@@ -20,9 +20,10 @@ use ApiPlatform\Metadata\ApiFilter;
         new GetCollection()
     ],
     normalizationContext: ['groups' => ['contract']],
+    denormalizationContext: ['groups' => ['contract']],
     
 )]
-#[ApiFilter(SearchFilter::class, properties: ['client.firstname' => 'partial', 'client.lastname' => 'partial', 'company.title' => 'partial', 'company.category.name' => 'partial'])]
+#[ApiFilter(SearchFilter::class, properties: ['client.firstname' => 'partial', 'client.lastname' => 'partial', 'company.id' => 'exact', 'company.category.id' => 'exact'])]
 
 class Contract
 {
@@ -37,15 +38,15 @@ class Contract
     private ?string $contract_number = null;
 
     #[Groups('contract')]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_of_issue = null;
 
     #[Groups('contract')]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $effective_date = null;
 
     #[Groups('contract')]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $due_date = null;
 
     #[Groups(['read'])]

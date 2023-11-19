@@ -21,6 +21,8 @@ class ContractStateProcessor implements ProcessorInterface
 
         if ($company->getCategory()->getName() == "Automobile") {
             $ttc_prime += $data->getAutomobileGuaranteeFund();
+        } else {
+            $data->setAutomobileGuaranteeFund(null);
         }
 
         $data->setTtcPrime($ttc_prime);
